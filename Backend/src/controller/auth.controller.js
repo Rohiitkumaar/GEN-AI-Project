@@ -70,44 +70,44 @@ async function RegisterUserController(req, res) {
    * @access public
    */
 
-  async function loginUserController(req, res) {
-    const { email, password } = req.body;
+async function loginUserController(req, res) {
+  const { email, password } = req.body;
 
-    const user = await userModel.findOne({ email });
+  const user = await userModel.findOne({ email });
 
-    if (!user) {
-      res.status(400).json({
-        message: "Invalid email or password"
-      })
-    }
-
-    const isPasswordValid = bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      res.status(400).json({
-        message: "Invalid email or password"
-      })
-    }
-
-    const token = jwt.sign(
-      {
-        id: user._id,
-        username: user.username,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" },
-    );
-
-    res.cookie("token", token);
-
-    res.status(200).json({
-      message: "User loggedIn successfully.",
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email
-      }
+  if (!user) {
+    return res.status(400).json({
+      message: "Invalid email or password",
     });
+  }
+
+  const isPasswordValid = bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    res.status(400).json({
+      message: "Invalid email or password",
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: user._id,
+      username: user.username,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" },
+  );
+
+  res.cookie("token", token);
+
+  res.status(200).json({
+    message: "User loggedIn successfully.",
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  });
 }
   
 /**
