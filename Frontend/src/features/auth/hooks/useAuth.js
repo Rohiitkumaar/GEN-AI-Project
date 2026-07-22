@@ -54,6 +54,7 @@ export const useAuth = () => {
         setUser(res.user);
       } catch (error) {
         setUser(null);
+        console.log(error);
       } finally {
         setLoading(false);
       }
