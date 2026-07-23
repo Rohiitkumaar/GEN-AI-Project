@@ -10,8 +10,6 @@ const ai = new GoogleGenAI({
 });
 
 async function invokeGenAi() {
-
-  console.log(process.env.GOOGLE_GENAI_API_KEY);
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-lite",
     contents: "hey Gemini ! Explain what is .net ? why is created?",
