@@ -1,6 +1,7 @@
 import app from "./src/app.js";
 import { config } from "dotenv";
 import connectToDB from "./src/config/database.js";
+import invokeGenAi from "./src/services/ai.service.js";
 
 config();
 
@@ -12,4 +13,6 @@ app.listen(3000, () => {
 });
 
 connectToDB();
+
+// invokeGenAi();
 
