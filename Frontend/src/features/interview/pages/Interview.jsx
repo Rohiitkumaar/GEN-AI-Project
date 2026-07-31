@@ -264,7 +264,7 @@ const Interview = () => {
           <div className="skill-gaps">
             <p className="skill-gaps__label">Skill Gaps</p>
             <div className="skill-gaps__list">
-              {report.skillGaps.map((gap, i) => (
+              {report.skillGap.map((gap, i) => (
                 <span
                   key={i}
                   className={`skill-tag skill-tag--${gap.severity}`}

@@ -17,14 +17,17 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      // <Protected>
-      //   <Home/>
-      // </Protected>
-      <Home />
+      <Protected>
+        <Home />
+      </Protected>
     ),
   },
   {
     path: "/interview/:interviewId",
-    element: <Interview/>
-  }
+    element: (
+      <Protected>
+        <Interview />
+      </Protected>
+    ),
+  },
 ]);

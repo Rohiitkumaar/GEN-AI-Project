@@ -30,4 +30,37 @@ async function generateInterviewReportController(req, res) {
   });
 }
 
-export { generateInterviewReportController };
+async function generateInterviewReportByIdController(req, res) {
+  
+  const { interviewId } = req.params;
+
+  const interviewReport = await interviewReportModel.findOne({ _id: interviewId, user: req.user.id });
+
+  if (!interviewReport) {
+    return res.status(401).json({
+      message: "Interview report is not found."
+    })
+  }
+
+  res.status(200).json({
+    message: "Interview report is fetched successfully.",
+    interviewReport
+  })
+}
+
+async function getAllInterviewReportController(req, res) {
+
+  const interviewReports = await interviewReportModel
+    .find({ user: req.user.id })
+    .sort({ createdAt: -1 })
+    .select(
+      "-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGap -preparationPlan",
+    );
+
+  res.status(200).json({
+    message: "Interview reports fetched successfully.",
+    interviewReports,
+  });
+}
+
+export { generateInterviewReportController, generateInterviewReportByIdController, getAllInterviewReportController };
