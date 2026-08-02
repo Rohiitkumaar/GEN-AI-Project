@@ -1,5 +1,5 @@
 import { PDFParse } from "pdf-parse";
-import { generateInterviewReport } from "../services/ai.service.js";
+import { generateInterviewReport,generateResumePdf } from "../services/ai.service.js";
 import interviewReportModel from "../models/interviewReport.model.js";
 
 async function generateInterviewReportController(req, res) {
@@ -63,4 +63,29 @@ async function getAllInterviewReportController(req, res) {
   });
 }
 
-export { generateInterviewReportController, generateInterviewReportByIdController, getAllInterviewReportController };
+async function generateResumePdfController(req, res) {
+  
+  const { interviewReportId } = req.params;
+  
+  const interviewReport = await interviewReportModel.findById(interviewReportId);
+
+  if (!interviewReport) {
+    return res.status(401).json({
+      message: "Interview report is not found"
+    })
+  }
+
+  const { resume, selfDescription, jobDescription } = interviewReport;
+
+  const PdfBuffer = await generateResumePdf({ resume, jobDescription, selfDescription });
+
+  res.set({
+    "Content-Type": "application/pdf",
+    "Content-Disposition": `attachment; filename=resume_${interviewReportId}.pdf`,
+  });
+
+  res.send(PdfBuffer);
+
+}
+
+export { generateInterviewReportController, generateInterviewReportByIdController, getAllInterviewReportController, generateResumePdfController };

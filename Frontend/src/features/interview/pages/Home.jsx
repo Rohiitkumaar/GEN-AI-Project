@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useEffect,useRef } from "react";
 import "../style/home.scss";
 import { useInterview } from "../hooks/useInterview.js";
 import { useNavigate } from "react-router";
 
 const Home = () => {
-  const { loading, generateReport, reports } = useInterview();
+  const { loading, generateReport, getAllReports, reports } = useInterview();
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const resumeInputRef = useRef();
@@ -21,6 +21,10 @@ const Home = () => {
     navigate(`/interview/${data._id}`);
   };
 
+  useEffect(() => {
+    getAllReports();
+  },[])
+
   if (loading) {
     return (
       <main className="loading-screen">
@@ -28,6 +32,8 @@ const Home = () => {
       </main>
     );
   }
+
+  console.log(reports);
 
   return (
     <div className="home-page">

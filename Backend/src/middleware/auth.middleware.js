@@ -5,15 +5,15 @@ async function authUser(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
-    res.status(401).json({
+    return res.status(401).json({
       message: "Token not provided."
     })
   }
 
-  const isTokenBlacklisted = blacklistTokenModel.findOne({ token });
+  const isTokenBlacklisted = await blacklistTokenModel.findOne({ token });
 
-  if (!isTokenBlacklisted) {
-    res.status(401).json({
+  if (isTokenBlacklisted) {
+    return res.status(401).json({
       message: "Token is invalid.",
     });
   }
