@@ -30,7 +30,6 @@ export const useAuth = () => {
     } finally {
       setLoading(false);
     }
-    
   };
 
   const handleLogout = async () => {
@@ -60,7 +59,12 @@ export const useAuth = () => {
       }
     };
 
-    getAndSetUser();
+    setTimeout(async () => {
+      const userData = getAndSetUser();
+      console.log(userData);
+    }, 200);
+
+    
   }, []);
 
   return { user, loading, handleLogin, handleLogout, handleRegister };

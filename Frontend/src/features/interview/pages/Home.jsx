@@ -2,6 +2,7 @@ import { useState, useEffect,useRef } from "react";
 import "../style/home.scss";
 import { useInterview } from "../hooks/useInterview.js";
 import { useNavigate } from "react-router";
+import AILoader from "../../AILoader.jsx";
 
 const Home = () => {
   const { loading, generateReport, getAllReports, reports } = useInterview();
@@ -26,11 +27,7 @@ const Home = () => {
   },[])
 
   if (loading) {
-    return (
-      <main className="loading-screen">
-        <h1>Loading your interview plan...</h1>
-      </main>
-    );
+    return <AILoader/>
   }
 
   console.log(reports);

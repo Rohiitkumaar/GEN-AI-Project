@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../style/interview.scss";
 import { useInterview } from "../hooks/useInterview.js";
 import { useParams } from "react-router";
+import AILoader from "../../AILoader.jsx";
 
 const NAV_ITEMS = [
   {
@@ -141,9 +142,7 @@ const Interview = () => {
 
   if (loading || !report) {
     return (
-      <main className="loading-screen">
-        <h1>Loading your interview plan...</h1>
-      </main>
+      <AILoader />
     );
   }
 
