@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context.jsx";
 import { login,register,getMe,logout } from "../services/auth.api.js";
+import { toast } from "sonner";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -11,8 +12,10 @@ export const useAuth = () => {
     try {
       const data = await login( email, password );
       setUser(data.user);
+      toast.success(data.message);
     } catch (error) {
       console.log(error);
+      toast.error("Invalid email or password");
     }
     finally {
       setLoading(false);
@@ -24,9 +27,11 @@ export const useAuth = () => {
     try {
       const data = await register( username, email, password );
       setUser(data.user);
+      toast.success(data.message);
       
     } catch (error) {
       console.log(error);
+      toast.error(error.response?.data?.message || "User registration failed.");
     } finally {
       setLoading(false);
     }
@@ -37,8 +42,10 @@ export const useAuth = () => {
     try {
       const data = await logout();
       setUser(null);
+      toast.success(data.message);
     } catch (error) {
       console.log(error);
+      toast.error("User Logout failed");
     } finally {
       setLoading(false);
     }
@@ -60,9 +67,8 @@ export const useAuth = () => {
     };
 
     setTimeout(async () => {
-      const userData = getAndSetUser();
-      console.log(userData);
-    }, 200);
+      getAndSetUser();
+    }, 500);
 
     
   }, []);

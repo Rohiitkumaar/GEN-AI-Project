@@ -1,6 +1,7 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api.js";
 import { useContext } from "react";
-import { InterviewContext } from "../interview.context.jsx";
+import { InterviewContext } from "../interview.context.jsx";  
+import { toast } from "sonner";
 
 export const useInterview = () => {
   const context = useContext(InterviewContext);
@@ -20,9 +21,12 @@ export const useInterview = () => {
 
       setReport(response.interviewReport)
 
+      toast.success(response.message);
+
 
     } catch (error) {
       console.log(error)
+      toast.error("Our AI assistant is currently busy. Please try again in a few moments.");
     }
     finally {
       setLoading(false);
@@ -65,8 +69,10 @@ export const useInterview = () => {
 
   const getResumePdf = async (interviewReportId) => {
     setLoading(true);
+    const toastId = toast.loading("AI is generating your resume. Please wait...");
     let response = null;
     try {
+
       response = await generateResumePdf({ interviewReportId });
 
       const url = window.URL.createObjectURL(new Blob([response], { type: "application/pdf" }));
@@ -76,11 +82,15 @@ export const useInterview = () => {
       link.setAttribute("download", `resume_${interviewReportId}.pdf`);
 
       document.body.appendChild(link);
+      toast.dismiss(toastId);
       link.click();
+
+      toast.success("Your generated resume is downloaded successfully.")
 
       
     } catch (error) {
       console.log(error)
+      toast.error("Server is busy. Try again later.");
       
     } finally {
       setLoading(false)

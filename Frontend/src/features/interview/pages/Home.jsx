@@ -3,22 +3,29 @@ import "../style/home.scss";
 import { useInterview } from "../hooks/useInterview.js";
 import { useNavigate } from "react-router";
 import AILoader from "../../AILoader.jsx";
+import { toast } from "sonner";
 
 const Home = () => {
   const { loading, generateReport, getAllReports, reports } = useInterview();
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const resumeInputRef = useRef();
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const navigate = useNavigate();
 
   const handleGenerateReport = async () => {
+    const toastId = toast.loading(
+      "AI is analyzing your profile. Please wait...",
+    );
     const resumeFile = resumeInputRef.current.files[0];
     const data = await generateReport({
       jobDescription,
       selfDescription,
       resumeFile,
     });
+
+    toast.dismiss( toastId );
     navigate(`/interview/${data._id}`);
   };
 
@@ -30,7 +37,6 @@ const Home = () => {
     return <AILoader/>
   }
 
-  console.log(reports);
 
   return (
     <div className="home-page">
@@ -131,8 +137,15 @@ const Home = () => {
                   </svg>
                 </span>
                 <p className="dropzone__title">
-                  Click to upload or drag &amp; drop
+                  {selectedFile
+                    ? selectedFile.name
+                    : "Click to upload or drag & drop"}
                 </p>
+                {selectedFile && (
+                  <p className="dropzone__subtitle">
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                )}
                 <p className="dropzone__subtitle">PDF or DOCX (Max 5MB)</p>
                 <input
                   ref={resumeInputRef}
@@ -141,14 +154,17 @@ const Home = () => {
                   id="resume"
                   name="resume"
                   accept=".pdf,.docx"
+                  onChange={(e) => {
+                    setSelectedFile(e.target.files[0]);
+                  }}
                 />
               </label>
             </div>
 
             {/* OR Divider */}
-            <div className="or-divider">
+            {/* <div className="or-divider">
               <span>OR</span>
-            </div>
+            </div> */}
 
             {/* Quick Self-Description */}
             <div className="self-description">
@@ -165,42 +181,6 @@ const Home = () => {
                 placeholder="Briefly describe your experience, key skills, and years of experience if you don't have a resume handy..."
               />
             </div>
-
-            {/* Info Box */}
-            <div className="info-box">
-              <span className="info-box__icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line
-                    x1="12"
-                    y1="8"
-                    x2="12"
-                    y2="12"
-                    stroke="#1a1f27"
-                    strokeWidth="2"
-                  />
-                  <line
-                    x1="12"
-                    y1="16"
-                    x2="12.01"
-                    y2="16"
-                    stroke="#1a1f27"
-                    strokeWidth="2"
-                  />
-                </svg>
-              </span>
-              <p>
-                Either a <strong>Resume</strong> or a{" "}
-                <strong>Self Description</strong> is required to generate a
-                personalized plan.
-              </p>
-            </div>
           </div>
         </div>
 
@@ -209,7 +189,7 @@ const Home = () => {
           <span className="footer-info">
             AI-Powered Strategy Generation &bull; Approx 30s
           </span>
-          <button onClick={handleGenerateReport} className="generate-btn"> 
+          <button onClick={handleGenerateReport} className="generate-btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

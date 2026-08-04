@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "sonner";
 
 const api = axios.create({
   baseURL: "http://localhost:3000",
@@ -6,7 +7,6 @@ const api = axios.create({
 });
 
 export async function register(username, email, password) {
-  try {
     const res = await api.post("/api/auth/register", {
       username,
       email,
@@ -14,9 +14,6 @@ export async function register(username, email, password) {
     });
 
     return res.data;
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 export async function login(email, password) {
@@ -25,6 +22,8 @@ export async function login(email, password) {
       email,
       password,
     });
+
+    
 
     return res.data;
   } catch (error) {
