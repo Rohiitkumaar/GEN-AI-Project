@@ -18,6 +18,37 @@ $severity-low: #3fb950;
     display: none;
 }
 
+// ---  Back Button -------------------------------------------------------------
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  margin-bottom: 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #8b94a7;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.back-btn svg {
+  font-size: 1rem;
+}
+
+.back-btn:hover {
+  background: rgba(255, 0, 102, 0.08);
+  color: #ff4d8d;
+}
+
 // ── Page Shell ────────────────────────────────────────────────────────────────
 .interview-page {
     width: 100%;

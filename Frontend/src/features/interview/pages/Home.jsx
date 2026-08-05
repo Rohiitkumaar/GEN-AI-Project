@@ -4,13 +4,16 @@ import { useInterview } from "../hooks/useInterview.js";
 import { useNavigate } from "react-router";
 import AILoader from "../../AILoader.jsx";
 import { toast } from "sonner";
-
+import { useAuth } from "../../auth/hooks/useAuth.js";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 const Home = () => {
   const { loading, generateReport, getAllReports, reports } = useInterview();
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const resumeInputRef = useRef();
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const { handleLogout } = useAuth();
 
   const navigate = useNavigate();
 
@@ -29,6 +32,15 @@ const Home = () => {
     navigate(`/interview/${data._id}`);
   };
 
+  const handleLogoutClick = async () => {
+    const res = await handleLogout();
+    toast.success(res.message);
+
+    navigate("/login");
+
+
+  }
+
   useEffect(() => {
     getAllReports();
   },[])
@@ -41,6 +53,11 @@ const Home = () => {
   return (
     <div className="home-page">
       {/* Page Header */}
+      <div className="header-top">
+        <button className="logout-btn" onClick={handleLogoutClick}>
+          <RiLogoutBoxRLine size={20} />
+        </button>
+      </div>
       <header className="page-header">
         <h1>
           Create Your Custom <span className="highlight">Interview Plan</span>

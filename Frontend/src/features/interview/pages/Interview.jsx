@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import "../style/interview.scss";
 import { useInterview } from "../hooks/useInterview.js";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import AILoader from "../../AILoader.jsx";
+import { IoArrowBack } from "react-icons/io5";
 
 const NAV_ITEMS = [
   {
@@ -133,6 +134,7 @@ const Interview = () => {
   const [activeNav, setActiveNav] = useState("technical");
   const { report, getReportById, loading, getResumePdf } = useInterview();
   const { interviewId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (interviewId) {
@@ -159,6 +161,10 @@ const Interview = () => {
         {/* ── Left Nav ── */}
         <nav className="interview-nav">
           <div className="nav-content">
+            <button className="back-btn" onClick={() => navigate("/")}>
+              <IoArrowBack />
+              <span>Back</span>
+            </button>
             <p className="interview-nav__label">Sections</p>
             {NAV_ITEMS.map((item) => (
               <button
