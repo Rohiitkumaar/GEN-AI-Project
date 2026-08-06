@@ -66,9 +66,7 @@ export const useAuth = () => {
       }
     };
 
-    setTimeout(async () => {
-      getAndSetUser();
-    }, 500);
+    getAndSetUser();
 
     
   }, []);

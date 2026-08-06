@@ -21,15 +21,21 @@ const Home = () => {
     const toastId = toast.loading(
       "AI is analyzing your profile. Please wait...",
     );
-    const resumeFile = resumeInputRef.current.files[0];
-    const data = await generateReport({
-      jobDescription,
-      selfDescription,
-      resumeFile,
-    });
+    try {
+      const resumeFile = resumeInputRef.current.files[0];
+      const data = await generateReport({
+        jobDescription,
+        selfDescription,
+        resumeFile,
+      });
 
-    toast.dismiss( toastId );
-    navigate(`/interview/${data._id}`);
+      if (!data) return;
+
+      navigate(`/interview/${data._id}`);
+    } finally {
+      toast.dismiss(toastId);
+    }
+    
   };
 
   const handleLogoutClick = async () => {
@@ -37,8 +43,6 @@ const Home = () => {
     toast.success(res.message);
 
     navigate("/login");
-
-
   }
 
   useEffect(() => {

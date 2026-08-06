@@ -23,16 +23,18 @@ export const useInterview = () => {
 
       toast.success(response.message);
 
+      return response.interviewReport;
 
     } catch (error) {
       console.log(error)
       toast.error("Our AI assistant is currently busy. Please try again in a few moments.");
+      return null;
     }
     finally {
       setLoading(false);
     }
 
-    return response.interviewReport;
+    
   }
 
   const getReportById = async (interviewId) => {
@@ -82,7 +84,7 @@ export const useInterview = () => {
       link.setAttribute("download", `resume_${interviewReportId}.pdf`);
 
       document.body.appendChild(link);
-      toast.dismiss(toastId);
+      
       link.click();
 
       toast.success("Your generated resume is downloaded successfully.")
@@ -93,6 +95,7 @@ export const useInterview = () => {
       toast.error("Server is busy. Try again later.");
       
     } finally {
+      toast.dismiss(toastId);
       setLoading(false)
     }
 
